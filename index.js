@@ -104,11 +104,10 @@ var badge ="";
 ## Table of Contents
 * [Description](#description)
 * [Installation](#installation)
-* [Use](#usage)
+* [Use](#use)
 * [Contribution](#contribution)
 * [License](#license)
 * [GitHub User Name / Email](#user)
-
 
 ## Description
 ${description}\n
