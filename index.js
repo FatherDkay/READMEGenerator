@@ -1,8 +1,7 @@
 const inquirer = require('inquirer');
-const generateReadMe = require('./src/readMe-template');
-const { writeFile } =require('./utils/generate-readMe');
-
+const fs = require('fs');
 const promptUser = () => {
+var badge ="";
     return inquirer.prompt([
         {
             type: 'input',
@@ -17,7 +16,6 @@ const promptUser = () => {
                 }
             }
         },
-
         {
             type: 'input',
             name: 'description',
@@ -31,44 +29,37 @@ const promptUser = () => {
               }
             }
         },
-
         {
             type: 'list',
             name: 'license',
             message: 'choose a license',
-            choices: ["MIT", "Apache", "GPLv3"],              
+            choices: ["Boost Software License 1.0", "Apache 2.0", "The MIT License", "WTFPL"],              
         },
-
         {
             type: 'input',
             name: 'install',
             message: 'Enter the installation instructions',
         },
-
         {
             type: 'input',
             name: 'usage',
             message: 'Enter the usage information',
         },
-
         {
             type: 'input',
             name: 'contributors',
             message: 'Enter the contributor informaiton',
         },
-
         {
             type: 'input',
             name: 'testing',
             message: 'Enter the testing instructions',
         },
-
         {
             type: 'input',
             name: 'questions',
             message: 'Enter the questions instructions',
         },
-        
         {
             type: 'input',
             name: 'userName',
@@ -82,13 +73,12 @@ const promptUser = () => {
                 }
             }
         },
-
         {
             type: 'input',
-            name: 'userEmail',
+            name: 'email',
             message: 'What is your email address? (Required)',
-            validate: userEmailInput => {
-                if (userEmailInput) {
+            validate: emailInput => {
+                if (emailInput) {
                 return true;
                 } else {
                 console.log('Hey, dont be shy...enter your email address');
@@ -97,54 +87,53 @@ const promptUser = () => {
             }
         },
     ])
-};
+    .then(({title, description, install, usage, license, contributors, userName, email}) =>{
+        switch(license) {
+            case "Apache 2.0":
+                badge = "[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)";
+                break;
+            case "Boost Software License 1.0":
+                badge ="[![License](https://img.shields.io/badge/License-Boost%201.0-lightblue.svg)](https://www.boost.org/LICENSE_1_0.txt)";
+            case "The MIT License":
+                badge ="[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)";    
+            case "WTFPL":
+                badge ="[![License: WTFPL](https://img.shields.io/badge/License-WTFPL-brightgreen.svg)](http://www.wtfpl.net/about/)"
+            };
 
-const promptTOC = tocData => {
-    console.log(`
-    =======================
-    Add a Table of Contents
-    =======================
-    `);
+        const readmeInfo = `# ${title}
+## Table of Contents
+* [Description](#description)
+* [Installation](#installation)
+* [Use](#usage)
+* [Contribution](#contribution)
+* [License](#license)
+* [GitHub User Name / Email](#user)
 
-    if(!tocData.lines) {
-        tocData.lines = [];
+
+## Description
+${description}\n
+## Installation
+${install}\n
+## Use
+${usage}\n
+## Contribution
+${contributors}\n
+## License
+${badge}\n
+${license}\n
+### User
+${userName}\n
+### Email
+${email}
+`
+fs.writeFile("readme.md",readmeInfo,(err) => {
+    if(err){
+        console.log(err)
     }
-    return inquirer
-    .prompt ([
-        {
-            type: 'input',
-            name: 'tocLine',
-            message: 'Enter a TOC title (Required)',
-            validate: tocInput => {
-              if (tocInput) {
-                return true;
-              } else {
-                console.log('Again, enter a toc title!');
-                return false;
-              }
-            }
-        },
-        {
-            type: 'confirm',
-            name: 'confirmMoreTOC',
-            message: 'Would you like to enter another TOC line?',
-            default: false
-         }
-    ])
-    .then(tocInfo => {
-        tocData.lines.push(tocInfo);
-        if(tocInfo.confirmMoreTOC) {
-            return promptTOC(tocData);
-        } else {
-            return tocData;
-        }
-    });
-};
+    console.log('ReadMe file has been created!')
+});
 
-promptUser()
-    .then(promptTOC)
-    .then(tocData => {
-        return generateReadMe(tocData)
-    });
+});
+}
 
-
+promptUser();
