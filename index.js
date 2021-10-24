@@ -108,7 +108,6 @@ var badge ="";
 * [Contribution](#contribution)
 * [License](#license)
 * [GitHub User Name / Email](#user)
-
 ## Description
 ${description}\n
 ## Installation
@@ -120,9 +119,9 @@ ${contributors}\n
 ## License
 ${badge}\n
 ${license}\n
-### User
-${userName}\n
-### Email
+## User
+https://www.github.com/${userName}\n
+## Email
 ${email}
 `
 fs.writeFile("readme.md",readmeInfo,(err) => {

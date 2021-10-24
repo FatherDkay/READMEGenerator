@@ -4,6 +4,7 @@
   "description": "App to create a readme.md by asking users questions in the terminal",
   "main": "index.js",
   "dependencies": {
+    "express": "^4.17.1",
     "inquirer": "^8.2.0"
   },
   "devDependencies": {},
@@ -19,5 +20,6 @@
   "bugs": {
     "url": "https://github.com/FatherDkay/READMEGenerator/issues"
   },
-  "homepage": "https://github.com/FatherDkay/READMEGenerator#readme"
+  "homepage": "https://github.com/FatherDkay/READMEGenerator#readme",
+  "keywords": []
 }
